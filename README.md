@@ -5,6 +5,7 @@ Pre-entrega del proyecto retail: esquema base (`clientes`, `productos`, `ventas`
 ## Contenido
 
 - `script.sql`: DDL (creación de tablas con PK, FK, UNIQUE y CHECK) y DML (carga en transacción `BEGIN ... COMMIT`, `UPDATE` masivo de precios y `DELETE` de una venta de prueba).
+- `pre-entrega-modulo4.sql`: consultas multicapa para análisis de negocio (JOIN, GROUP BY, HAVING). Ver sección "Módulo 4".
 
 ## Cómo ejecutarlo (pgAdmin o DBeaver)
 
@@ -36,3 +37,15 @@ El script empieza con `DROP TABLE IF EXISTS`, así que se puede volver a ejecuta
 
 - `UPDATE`: aumenta 10% el precio de la categoría `Electrónica` (con `SELECT` de control antes y después).
 - `DELETE`: elimina la venta de prueba `id_venta = 6` (con `SELECT` previo). Quedan 5 ventas.
+
+## Módulo 4: consultas multicapa
+
+Ejecutar `pre-entrega-modulo4.sql` en la base `retail_project`, **después** de `script.sql`.
+
+El script empieza con un paso de preparación: crea la tabla `categorias`, la vincula con `productos` mediante una FK y agrega algunos datos (dos clientes sin compras y compras repetidas). Se puede ejecutar más de una vez sin duplicar datos.
+
+| Consulta | Problema de negocio | Técnicas |
+|---|---|---|
+| 1. Rentabilidad por categoría | Qué categorías generan más ingresos (umbral: más de $100.000) | JOIN de 3 tablas, `SUM`, `GROUP BY`, `HAVING` |
+| 2. Clientes sin compras | Clientes registrados a los que apuntar una campaña de primera compra | `LEFT JOIN`, `COALESCE`, `HAVING COUNT = 0` |
+| 3. Top de compras por cliente | Producto preferido y fecha de última compra de cada cliente | JOIN de 3 tablas, `WITH`, `ROW_NUMBER`, `MAX` |
